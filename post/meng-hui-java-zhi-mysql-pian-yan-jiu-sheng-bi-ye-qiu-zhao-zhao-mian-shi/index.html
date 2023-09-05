@@ -1,0 +1,227 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>梦回JAVA之MySQL篇（研究生毕业秋招找面试） | GinWithoutA的随笔空间</title>
+<link rel="shortcut icon" href="https://GinWithoutA.github.io//favicon.ico?v=1693915246477">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://GinWithoutA.github.io//styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="梦回JAVA之MySQL篇（研究生毕业秋招找面试） | GinWithoutA的随笔空间 - Atom Feed" href="https://GinWithoutA.github.io//atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="内连接与外连接
+
+内连接：合并具有同一列的两个以上的表的行，结果集中不包含一个表与另一个表不匹配的行
+外连接：合并具有同一列的两个以上的表的行，结果集中不仅包含了一个表与另一个表匹配的行，还包含了左表或者右表中不匹配的行
+
+外连接的分类
+
+..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://GinWithoutA.github.io/">
+  <img class="avatar" src="https://GinWithoutA.github.io//images/avatar.png?v=1693915246477" alt="">
+  </a>
+  <h1 class="site-title">
+    GinWithoutA的随笔空间
+  </h1>
+  <p class="site-description">
+    什么都写写
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              梦回JAVA之MySQL篇（研究生毕业秋招找面试）
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-07-08
+              </span>
+              <span>
+                2 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <h1 id="内连接与外连接">内连接与外连接</h1>
+<ul>
+<li><strong>内连接</strong>：合并具有同一列的两个以上的表的行，结果集中不包含一个表与另一个表不匹配的行</li>
+<li><strong>外连接</strong>：合并具有同一列的两个以上的表的行，结果集中不仅包含了一个表与另一个表匹配的行，还包含了左表或者右表中不匹配的行</li>
+</ul>
+<h2 id="外连接的分类"><strong>外连接的分类</strong></h2>
+<ul>
+<li>左外连接</li>
+<li>右外连接</li>
+<li>满外连接<br>
+<img src="https://GinWithoutA.github.io//post-images/1688798206438.png" alt="" loading="lazy"><br>
+<font color='red'><strong>举个例子</strong></font>：查询所有的员工以及部门信息</li>
+</ul>
+<pre><code class="language-sql">SELECT last_name, department_name, city
+FROM employee e INNER JOIN departments d
+ON e.`department_id` = d.`department_id`
+JOIN locations l
+ON d.`location_id` = l.`location_id`;
+</code></pre>
+<p>上述的是使用SQL99进行的内连接查询，并不能查询到所有的信息（<code>Employee</code>表中有一个字段是没有<code>Department</code>的）。</p>
+<pre><code class="language-sql">SELECT last_name, department_name, city
+FROM employee e LEFT OUTER JOIN departments d
+ON e.`department_id` = d.`department_id`
+</code></pre>
+<h1 id="sql99的新特性">SQL99的新特性</h1>
+<ul>
+<li>自然连接（<code>NATURAL JOIN</code>）：自动查询两张表中所有相同的字段，然后进行等值连接</li>
+<li><code>USING</code>：当需要指定连接要求的时候，原来的方法是使用<code>JOIN...ON....</code>，现在可以变成<code>JOIN...USING (...)</code></li>
+</ul>
+<h1 id="sql执行流程">SQL执行流程</h1>
+<figure data-type="image" tabindex="1"><img src="https://GinWithoutA.github.io//post-images/1688801101553.png" alt="" loading="lazy"></figure>
+<h2 id="1-查询缓存"><strong>1. 查询缓存</strong></h2>
+<p>在Mysql 8.0之后就删除了，基本是个鸡肋，因为只有相同的查询语句才能命中，并且会受到缓存失效的影响以及一些函数的影响。</p>
+<h2 id="2-解析器"><strong>2. 解析器</strong></h2>
+<ul>
+<li>词法分析（先）：分析每个字符串（以空格为间隙）分别是什么，代表什么</li>
+<li>语法分析（后）：判断该条SQL语句是否正确，符合语法要求<br>
+如果都正确，则会生成一个语法树，并进行分析</li>
+</ul>
+<h2 id="3-优化器"><strong>3. 优化器</strong></h2>
+<p>它会确定SQL语句的执行路径，比如是全表检索还是索引检索等。</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E5%86%85%E8%BF%9E%E6%8E%A5%E4%B8%8E%E5%A4%96%E8%BF%9E%E6%8E%A5">内连接与外连接</a>
+<ul>
+<li><a href="#%E5%A4%96%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%88%86%E7%B1%BB"><strong>外连接的分类</strong></a></li>
+</ul>
+</li>
+<li><a href="#sql99%E7%9A%84%E6%96%B0%E7%89%B9%E6%80%A7">SQL99的新特性</a></li>
+<li><a href="#sql%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B">SQL执行流程</a>
+<ul>
+<li><a href="#1-%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98"><strong>1. 查询缓存</strong></a></li>
+<li><a href="#2-%E8%A7%A3%E6%9E%90%E5%99%A8"><strong>2. 解析器</strong></a></li>
+<li><a href="#3-%E4%BC%98%E5%8C%96%E5%99%A8"><strong>3. 优化器</strong></a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://GinWithoutA.github.io/post/meng-hui-java-zhi-spring-pian-yan-jiu-sheng-bi-ye-qiu-zhao-zhao-mian-shi/">
+              <h3 class="post-title">
+                梦回JAVA之Spring篇（研究生毕业秋招找面试）
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://GinWithoutA.github.io//atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

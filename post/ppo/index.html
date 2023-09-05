@@ -1,0 +1,353 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PPO | GinWithoutA的随笔空间</title>
+<link rel="shortcut icon" href="https://GinWithoutA.github.io//favicon.ico?v=1693915246477">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://GinWithoutA.github.io//styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="PPO | GinWithoutA的随笔空间 - Atom Feed" href="https://GinWithoutA.github.io//atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="解构复杂动作空间（Action Space）
+如果湘江各种各样的强化学习算法应用在实际问题中，那么第一步就是需要将原始的自然决策问题转化为标准的马尔可夫决策过程（MDP），具体来说就是定义清楚MDP五元组的各个元素。
+动作空间概述
+用键盘举..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://GinWithoutA.github.io/">
+  <img class="avatar" src="https://GinWithoutA.github.io//images/avatar.png?v=1693915246477" alt="">
+  </a>
+  <h1 class="site-title">
+    GinWithoutA的随笔空间
+  </h1>
+  <p class="site-description">
+    什么都写写
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              PPO
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-05-29
+              </span>
+              <span>
+                13 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <h1 id="解构复杂动作空间action-space">解构复杂动作空间（Action Space）</h1>
+<p>如果湘江各种各样的强化学习算法应用在实际问题中，那么第一步就是需要将<strong>原始的自然决策问题转化为标准的马尔可夫决策过程（MDP）</strong>，具体来说就是定义清楚MDP五元组的各个元素。</p>
+<h2 id="动作空间概述"><strong>动作空间概述</strong></h2>
+<p>用键盘举个例子：<br>
+<img src="https://GinWithoutA.github.io//post-images/1685006164597.png" alt="" loading="lazy"><br>
+键盘上每个按键按下去和松开就代表相应的动作执行还是不执行，一个键就是一个2维的离散动作，整个键盘就是一个巨大的离散动作集合。此外，各个按键还存在一定的依赖关系（Ctrl+Shift）,这些关系组合起来就构成了一个非常复杂的动作空间。</p>
+<p>动作是Agent做出的决策行为，即决策算法的输出。Action Space是指所有可能Action的集合。</p>
+<h3 id="动作空间的分类"><strong>动作空间的分类</strong></h3>
+<p><img src="https://GinWithoutA.github.io//post-images/1685006396962.png" alt="" loading="lazy"><br>
+离散和连续动作是经典的两类动作空间，在此基础上，它又可以扩展到更复杂的多维离散动作空间和混合动作空间，这两种空间更多应对于生活中的一些决策应用。</p>
+<p>动作空间Action Spce有以下几个特点：</p>
+<ul>
+<li>**不同的动作空间常需要不同的算法：**例如处理离散动作空间常用Value-Based方法（DQN）和策略梯度方法（PPO）。连续动作空间则会涉及更多策略梯度方法的变体，如PPO、DDPG、SAC。这些算法在设计之初就会为对应的动作空间做⼀些特殊的设计，进而使得它们在这些场景上会有⼀定的优势。</li>
+<li>**标准RL算法常需要对特定动作进行适配和定制化：**比如想将标准的 PPO 算法应⽤到上述四种动<br>
+作空间上，那么就需要针对具体的动作空间添加⼀些算法设计和技巧。</li>
+<li>**同⼀个环境可以用不同的动作空间：**基于对决策问题（环境）的领域知识，基于对强化学习算法的<br>
+使⽤经验，可以对原有环境的动作空间做⼀些改造，让改造后的动作空间更适合于算法训练和部<br>
+署。</li>
+</ul>
+<h3 id="动作塑形action-shaping"><strong>动作塑形（Action Shaping）</strong></h3>
+<p>上面提到的动作空间改造，又称为动作塑形（Action Shaping），即对原始的动作空间进行各种预处理和特征工程操作，转化为更适合RL的空间。下面是实践中常见的一些动作塑形操作和变换前后动作空间的类型，其中标明的三种最常用的变换分别为：</p>
+<ul>
+<li>DC：连续动作空间离散化</li>
+<li>RA：去除部分冗余或无意义的动作</li>
+<li>CMD：将多维离散动作空间转换为离散动作空间<br>
+<img src="https://GinWithoutA.github.io//post-images/1685008426261.png" alt="" loading="lazy"></li>
+</ul>
+<h2 id="离散动作空间"><strong>离散动作空间</strong></h2>
+<p>由<strong>有限数量</strong>的动作组成，包含<strong>特定任务中所有可用的离散控制指令</strong>，可以类比机器学习中的分类任务。</p>
+<p>如果智能体正在玩超级⻢⾥奥游戏，那么将当前游戏这⼀帧的画⾯（下图所⽰）记为图⽚观察状态<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>s</mi></mrow><annotation encoding="application/x-tex">s</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">s</span></span></span></span><br>
+。⽽智能体在观测到状态<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>s</mi></mrow><annotation encoding="application/x-tex">s</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">s</span></span></span></span>后，可选择的动作集合则记为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>a</mi><mo>∈</mo><mo>{</mo><mi>l</mi><mi>e</mi><mi>f</mi><mi>t</mi><mo separator="true">,</mo><mi>r</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>t</mi><mo separator="true">,</mo><mi>u</mi><mi>p</mi><mo>}</mo></mrow><annotation encoding="application/x-tex">a\in\{left,right,up\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mord mathdefault">a</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">e</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">t</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">i</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord mathdefault">h</span><span class="mord mathdefault">t</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">u</span><span class="mord mathdefault">p</span><span class="mclose">}</span></span></span></span>，即⼀个标准的3维离散动作空间，每次决策需要从这三个离散动作中选择⼀个。<br>
+<img src="https://GinWithoutA.github.io//post-images/1685169316247.png" alt="" loading="lazy"><br>
+基于上述的状态和动作的定义，智能体往往需要从数据中学习到<strong>策略</strong><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>π</mi></mrow><annotation encoding="application/x-tex">\pi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">π</span></span></span></span>，即<strong>向策略<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>π</mi></mrow><annotation encoding="application/x-tex">\pi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">π</span></span></span></span>输入状态，它将输出所选动作，或是每个动作的概率</strong>。对于PPO来说，具体学习是一种<strong>随机性策略</strong>，即给定某时刻<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.61508em;vertical-align:0em;"></span><span class="mord mathdefault">t</span></span></span></span>马里奥游戏画面，即图片观察状态<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>s</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">s_t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，PPO智能体策略输出选择各个离散动作的概率分布<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>π</mi><mo>(</mo><msub><mi>a</mi><mi>t</mi></msub><mi mathvariant="normal">∣</mi><msub><mi>s</mi><mi>t</mi></msub><mo>)</mo></mrow><annotation encoding="application/x-tex">\pi(a_t|s_t)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>，比如：</p>
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>π</mi><mo>(</mo><mi>l</mi><mi>e</mi><mi>f</mi><mi>t</mi><mi mathvariant="normal">∣</mi><msub><mi>s</mi><mi>t</mi></msub><mo>)</mo><mo>=</mo><mn>0.2</mn></mrow><annotation encoding="application/x-tex">\pi(left|s_t)=0.2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">e</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">t</span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">2</span></span></span></span></li>
+<li><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>π</mi><mo>(</mo><mi>r</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>t</mi><mi mathvariant="normal">∣</mi><msub><mi>s</mi><mi>t</mi></msub><mo>)</mo><mo>=</mo><mn>0.1</mn></mrow><annotation encoding="application/x-tex">\pi(right|s_t)=0.1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">i</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord mathdefault">h</span><span class="mord mathdefault">t</span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">1</span></span></span></span></li>
+<li><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>π</mi><mo>(</mo><mi>u</mi><mi>p</mi><mi mathvariant="normal">∣</mi><msub><mi>s</mi><mi>t</mi></msub><mo>)</mo><mo>=</mo><mn>0.7</mn></mrow><annotation encoding="application/x-tex">\pi(up|s_t)=0.7</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="mopen">(</span><span class="mord mathdefault">u</span><span class="mord mathdefault">p</span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">7</span></span></span></span></li>
+</ul>
+<p>PPO是一种深度强化学习算法，由于策略要建模的“状态-动作”之间的映射在实际问题中可能⽐较复<br>
+杂，所以结合神经⽹络来实现参数策略函数<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>π</mi><mo>(</mo><mi>a</mi><mi mathvariant="normal">∣</mi><mi>s</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">\pi(a|s)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="mopen">(</span><span class="mord mathdefault">a</span><span class="mord">∣</span><span class="mord mathdefault">s</span><span class="mclose">)</span></span></span></span>，对于这个策略神经⽹络，输⼊状态<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>s</mi></mrow><annotation encoding="application/x-tex">s</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">s</span></span></span></span>，⽹络就输<br>
+出每⼀维离散动作<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>a</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">a_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>对应的 logit 值，⽐如上⽂所⽰的⻢⾥奥游戏就是最终输出3个logit值，完整的输⼊输出数据流可以参考下图：<br>
+<img src="https://GinWithoutA.github.io//post-images/1685169716026.png" alt="" loading="lazy"><br>
+logit的含义是神经网络<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>π</mi><mo>(</mo><mi>a</mi><mi mathvariant="normal">∣</mi><mi>s</mi><mo separator="true">;</mo><mi>θ</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">\pi(a|s;\theta)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="mopen">(</span><span class="mord mathdefault">a</span><span class="mord">∣</span><span class="mord mathdefault">s</span><span class="mpunct">;</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">θ</span><span class="mclose">)</span></span></span></span>的原始输出（比如最后一层全连接层的输出，不加激活函数，取实数范围），离散动作空间有<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span>个动作，则策略网络输出<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span>个动作对应的logit值。这些logit值经过softmax函数即可以得到当前策略<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>π</mi><mo>(</mo><mi>a</mi><mi mathvariant="normal">∣</mi><mi>s</mi><mo separator="true">;</mo><mi>θ</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">\pi(a|s;\theta)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="mopen">(</span><span class="mord mathdefault">a</span><span class="mord">∣</span><span class="mord mathdefault">s</span><span class="mpunct">;</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">θ</span><span class="mclose">)</span></span></span></span>选择每个离散动作的概率。</p>
+<p>在智能体策略选择各个离散动作的概率之后，一般常有两种采样动作的方式：</p>
+<ul>
+<li><strong>确定性策略（Determinstic Decision）</strong>：直接贪心选择概率最大的那一维动作（一般实现中直接选择logit最大的，因为softmax不改变logit的相对大小，即<span class='katex-error' title='ParseError: KaTeX parse error: Expected &#039;}&#039;, got &#039;EOF&#039; at end of input: …pi(a|s;\theta)}'>\arg\max_{a\in{A}{\pi(a|s;\theta)}</span>）。</li>
+<li><strong>随机性决策（Stochastic Decision）</strong>：根据之前将<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>π</mi><mo>(</mo><mi>a</mi><mi mathvariant="normal">∣</mi><mi>s</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">\pi(a|s)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="mopen">(</span><span class="mord mathdefault">a</span><span class="mord">∣</span><span class="mord mathdefault">s</span><span class="mclose">)</span></span></span></span>的输出经过softmax函数后获得的概率值，构造相应概率分布（离散动作空间即对应玻尔兹曼分布）进行抽样得到动作。
+<ul>
+<li>随机性决策⼀般⽤于 PPO 智能体收集数据的过程，由于强化学习是⼀个在线训练的过程，所以<br>
+训练中需要保持⾜够的探索程度（即概率低的动作也有被采样到的可能性），同时也更多地利<br>
+⽤概率⾼的动作。此外，为了更精细地控制这⼀点，部分任务中还会在 softmax 处设置专⻔的<br>
+温度系数来控制概率分布的平滑程度。</li>
+<li>另⼀⽅⾯， PPO 智能体训练过程中也会定期进⾏评测，分析当前智能体的性能。这时则会根据<br>
+情况选择使⽤确定性决策还是随机性决策。⼀般来说，对于环境简单，⼲扰噪声因素较少的环<br>
+境（例如超级⻢⾥奥），确定性决策往往能直接给出优秀的解。⽽另外⼀些过于复杂，环境中<br>
+随机性较⼤，最优策略不唯⼀的环境（例如星际争霸2，局部视野的迷宫），使⽤随机性决策则<br>
+可以获得⽐较⾼的期望收益。</li>
+</ul>
+</li>
+</ul>
+<p>在确定了智能体策略的计算图和采样动作的⽅式之后，就可以让智能体和环境不断交互，产⽣⼀系列<br>
+轨迹数据⽤于训练，整个交互流程如下图所示：<br>
+<img src="https://GinWithoutA.github.io//post-images/1685170933600.png" alt="" loading="lazy"><br>
+对于PPO算法在离散动作空间的实现理论其实就是前面所说的内容。下面是具体的代码。（以下代码只包含采样动作的选择，不包含PPO的具体实现）</p>
+<pre><code class="language-python"># 离散动作空间是最常见的动作空间之一，例如像超级马里奥，雅达利（Atari）这样的视频游戏就通过这种动作空间来决策。
+# 具体来说，它包含一组可选的离散动作选项，每次决策需要从其中选择一个。离散动作空间常常被建模成广义伯努利分布来优化（类似一个分类问题）。
+
+from typing import List
+import torch
+import torch.nn as nn
+
+class DiscretePolicyNetwork:
+    &quot;&quot;&quot;
+        定义 PPO 中所使用的离散动作策略网络，其主要包含两部分：编码器（encoder）和决策输出头（head）
+    &quot;&quot;&quot;
+    def __init__(self, obs_shape: int, action_space: int) -&gt; None:
+        super(DiscretePolicyNetwork, self).__init__()       # 继承PyTorch神经网络类的必须操作，自定义的神经网络必须是`nn.Module`的子类
+        self.encoder = nn.Sequential(                       # 定义编码器模块，将原始的状态映射为特征向量。对于不同的环境，可能状态信息的模态不同，需要根据情况选择适当的编码器神经网络，例如对于图片状态信息就常常使用卷积神经网络
+            nn.Linear(obs_shape, 32),                       # 这里我们用一个简单的单层 MLP 作为例子，即:
+            nn.ReLU()                                       # y = max(Wx+b, 0)
+        )
+        self.head = nn.Linear(32, action_space)             # 定义离散动作的决策输出头，一般仅仅一层全连接层即可
+        
+    def forward(self, x: torch.Tensor) -&gt; torch.Tensor:
+        &quot;&quot;&quot;
+            描述 PPO 中所使用的离散动作策略网络的前向计算图
+            x -&gt; encoder -&gt; head -&gt; logit
+        &quot;&quot;&quot;
+        x = self.encoder(x)                                 # 原始状态转化为特征向量
+        logit = self.head(x)                                # 输出logit
+        return logit
+        
+class MultiDiscretePolicyNetwork(nn.Module):
+    
+    def __init__(self, obs_shape: int, action_shape: List[int]) -&gt; None:
+        &quot;&quot;&quot;
+            定义 PPO 中所使用的多维离散动作策略网络，其主要包含两部分：编码器（encoder）和决策输出头（head）
+        &quot;&quot;&quot;
+        super(MultiDiscretePolicyNetwork, self).__init__()
+        self.encoder = nn.Sequential(
+            nn.Linear(obs_shape, 32),
+            nn.ReLU()
+        )
+        self.head = nn.ModuleList()
+        for size in action_shape:
+            self.head.append(nn.Linear(32, size))
+            
+    def forward(self, x: torch.Tensor) -&gt; List[torch.Tensor]:
+        x = self.encoder(x)
+        logit = [h(x) for h in self.head]
+        return logit
+
+def sample_action(logit: torch.Tensor) -&gt; torch.Tensor:
+    &quot;&quot;&quot;
+        输入 logit 采样获得离散动作，输入维度为 (B, action_shape) 输出维度为 output shape = (B, )
+        在这个示例中，课程中提到的 distributions 工具库的三个维度分别为
+        batch_shape = (B, ), event_shape = (), sample_shape = ()
+
+    &quot;&quot;&quot;
+    prob = torch.softmax(logit, dim=-1)                         # 将 logit 转化为概率（logit 一般指神经网络的原始输出，不经过激活函数，例如最后一层全连接层的输出）
+    dist = torch.distributions.Categorical(probs=prob)          # 构建广义伯努利分布。它的概率质量函数为
+    return dist.sample()                                        # 为一个 batch 里的每个样本采样一个离散动作，并返回它
+
+def test_sample_discrete_action():
+    &quot;&quot;&quot;
+         离散动作空间的主函数，构建一个简单的策略网络，执行前向计算过程，并采样得到一组离散动作
+    &quot;&quot;&quot;
+    B, obs_shape, action_shape = 4, 10, 6            # 设置相关参数 batch_size = 4, obs_shape = 10, action_shape = 6.
+    state = torch.rand(B, obs_shape)                 # 从0-1的均匀分布中生成状态数据
+    policy_network = DiscretePolicyNetwork(obs_shape, action_shape)
+    logit = policy_network(state)                    # 策略网络执行前向计算，即计算logit
+    assert logit.shape == (B, action_shape)
+    action = sample_action(logit)
+    assert action.shape == (B, )    
+    
+def test_sample_multi_discrete_action():
+    &quot;&quot;&quot;
+        多维离散动作空间的主函数，构建一个简单的策略网络，执行前向计算过程，并采样得到一组多维离散动作
+    &quot;&quot;&quot; 
+    B, obs_shape, action_shape = 4, 10, [4, 5, 6]
+    state = torch.rand(B, obs_shape)
+    policy_network = MultiDiscretePolicyNetwork(obs_shape, action_shape)
+    logit = policy_network(state)
+    for i in range(len(logit)):
+        assert logit[i].shape == (B, action_shape[i])
+    for i in range(len(logit)):
+        action_i = sample_action(logit[i])
+        assert action_i.shape == (B, )
+
+if __name__ == &quot;__main__&quot;:
+    test_sample_discrete_action()
+    test_sample_multi_discrete_action()
+</code></pre>
+<p>对于<strong>随机性决策采样动作</strong>，这里需要进行阐述。<code>torch.distribution</code>实现了各种概率分布，以及相关用于抽样和计算统计数据的方法。如对于离散动作空间，通常使⽤ <code>torch.distribution.Categorical</code>来构建策略神经⽹络输出的离散动作概率分布，决策时直接使⽤它的函数<code>sample()</code>即可返回抽样结果。</p>
+<p>深入理解<code>torch.distribution</code>的工作原理，需要理解三种类型的<code>shape</code>，即<strong>Sample Shape、Batch Shape、Event Shape</strong>。</p>
+<ul>
+<li><strong>Sample Shape</strong>为针对单个分布的采样次数，在使用<code>sample(sample_shape)</code>时指定，即从这个分布中独立同分布地采样多个值</li>
+<li><strong>Batch Shape</strong>为用于采样的（不同）分布的个数，例如对于一批（batch）样本，采样每个样本对应的动作</li>
+<li><strong>Event Shape</strong>为单个分布本身的维度，具体使用时跟概率分布的语义强相关，例如后续更复杂的动作空间，可能需要考虑多重动作之间的关系。</li>
+<li><img src="https://GinWithoutA.github.io//post-images/1685328198411.png" alt="" loading="lazy"></li>
+</ul>
+<h3 id="使用ppo离散动作空间来解决火箭回收中的离散控制">使用PPO+离散动作空间来解决火箭回收中的离散控制</h3>
+<p>2021年3⽉4⽇，美国得克萨斯州 Boca Chica 测试基地，SpaceX 的星舰⻜船原型 SN10 再次表演了⼀场空中杂技，实现了星舰⾼空试⻜的⾸次平稳落地，下图是 SN10 发射和着陆的实际情况：<br>
+<img src="https://GinWithoutA.github.io//post-images/1685328628212.png" alt="" loading="lazy"><br>
+具体来说，这个任务就是要控制火箭从水平的初始状态，不断调整发动机的推力从而控制姿态，最终成功竖直平稳落地。实际的环境实现是⼀个简化模型，考虑了基本的气缸动⼒学模型，并假设空气阻力与速度成正比。⽕箭底部安装了推动力为矢量的发动机，强化学习的⽬标也就是控制这些发动机的相关参数。具体原理图如下所⽰，将原始连续的推力控制<strong>离散化</strong>为<strong>三个⻆度</strong><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>×</mo></mrow><annotation encoding="application/x-tex">\times</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord">×</span></span></span></span><strong>三种推力</strong>的<strong>九维离散动作空间</strong>：<br>
+<img src="https://GinWithoutA.github.io//post-images/1685328850547.png" alt="" loading="lazy"><br>
+⼀般情况下，复杂机械的控制⼤多都为连续控制，但在精度要求不是特别⾼的问题中，合理的离散化<br>
+将会⼤⼤提升问题的解决效率。具体来说，这⾥将发动机的推⼒与喷嘴⻆度进⾏组合，预设了9个<br>
+可选的离散动作。</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E8%A7%A3%E6%9E%84%E5%A4%8D%E6%9D%82%E5%8A%A8%E4%BD%9C%E7%A9%BA%E9%97%B4action-space">解构复杂动作空间（Action Space）</a>
+<ul>
+<li><a href="#%E5%8A%A8%E4%BD%9C%E7%A9%BA%E9%97%B4%E6%A6%82%E8%BF%B0"><strong>动作空间概述</strong></a>
+<ul>
+<li><a href="#%E5%8A%A8%E4%BD%9C%E7%A9%BA%E9%97%B4%E7%9A%84%E5%88%86%E7%B1%BB"><strong>动作空间的分类</strong></a></li>
+<li><a href="#%E5%8A%A8%E4%BD%9C%E5%A1%91%E5%BD%A2action-shaping"><strong>动作塑形（Action Shaping）</strong></a></li>
+</ul>
+</li>
+<li><a href="#%E7%A6%BB%E6%95%A3%E5%8A%A8%E4%BD%9C%E7%A9%BA%E9%97%B4"><strong>离散动作空间</strong></a>
+<ul>
+<li><a href="#%E4%BD%BF%E7%94%A8ppo%E7%A6%BB%E6%95%A3%E5%8A%A8%E4%BD%9C%E7%A9%BA%E9%97%B4%E6%9D%A5%E8%A7%A3%E5%86%B3%E7%81%AB%E7%AE%AD%E5%9B%9E%E6%94%B6%E4%B8%AD%E7%9A%84%E7%A6%BB%E6%95%A3%E6%8E%A7%E5%88%B6">使用PPO+离散动作空间来解决火箭回收中的离散控制</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://GinWithoutA.github.io/post/lun-wen-xue-xi/">
+              <h3 class="post-title">
+                论文学习1
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://GinWithoutA.github.io//atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

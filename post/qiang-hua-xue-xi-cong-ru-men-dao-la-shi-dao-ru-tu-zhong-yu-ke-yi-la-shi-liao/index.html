@@ -1,0 +1,303 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>强化学习-从入门到拉屎到入土：今天我们来拉屎了-1（进阶篇） | GinWithoutA的随笔空间</title>
+<link rel="shortcut icon" href="https://GinWithoutA.github.io//favicon.ico?v=1693915246477">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://GinWithoutA.github.io//styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="强化学习-从入门到拉屎到入土：今天我们来拉屎了-1（进阶篇） | GinWithoutA的随笔空间 - Atom Feed" href="https://GinWithoutA.github.io//atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="强化学习的主要构成
+强化学习主要包含两个神经网络：
+
+Actor：执行者，也叫policy$\pi$
+Critic：评价者
+
+怎么训练强化学习
+强化学习的分类
+值更新（Value-based Learning）
+主要是训练一个好的criti..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://GinWithoutA.github.io/">
+  <img class="avatar" src="https://GinWithoutA.github.io//images/avatar.png?v=1693915246477" alt="">
+  </a>
+  <h1 class="site-title">
+    GinWithoutA的随笔空间
+  </h1>
+  <p class="site-description">
+    什么都写写
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              强化学习-从入门到拉屎到入土：今天我们来拉屎了-1（进阶篇）
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-05-25
+              </span>
+              <span>
+                9 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <h1 id="强化学习的主要构成">强化学习的主要构成</h1>
+<p>强化学习主要包含两个神经网络：</p>
+<ul>
+<li>Actor：执行者，也叫policy$\pi$</li>
+<li>Critic：评价者</li>
+</ul>
+<h1 id="怎么训练强化学习">怎么训练强化学习</h1>
+<h1 id="强化学习的分类"><strong>强化学习的分类</strong></h1>
+<h2 id="值更新value-based-learning"><strong>值更新（Value-based Learning）</strong></h2>
+<p>主要是训练一个好的critic</p>
+<h3 id="状态价值函数state-value-function"><strong>状态价值函数（State-value Function）</strong></h3>
+<p>状态价值函数 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>V</mi><mi>π</mi></msup><mo>(</mo><mi>s</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">V^\pi(s)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.664392em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.03588em;">π</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mclose">)</span></span></span></span> 不能单独使用更新policy，需要配合actor帮助进行强化学习</p>
+<h3 id="动作状态价值函数action-state-value-function"><strong>动作状态价值函数（Action-State Value Function）</strong></h3>
+<p>动作状态价值函数 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>Q</mi><mi>π</mi></msup><mo>(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">Q^\pi(s,a)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault">Q</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.664392em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.03588em;">π</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">a</span><span class="mclose">)</span></span></span></span> 通过学习 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>Q</mi></mrow><annotation encoding="application/x-tex">Q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">Q</span></span></span></span> 值可以帮助更新policy</p>
+<h2 id="策略更新policy-based-learning"><strong>策略更新（Policy-Based Learning）</strong></h2>
+<p>通过学习找到更好的actor（<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>π</mi></mrow><annotation encoding="application/x-tex">\pi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">π</span></span></span></span>）进行强化学习</p>
+<h3 id="策略更新的几大算法"><strong>策略更新的几大算法</strong></h3>
+<h4 id="策略梯度policy-gradientpg"><strong>策略梯度（Policy Gradient/PG）</strong></h4>
+<p>策略梯度是一种强化学习优化方法，用于训练能够产生最优行为策略的神经网络模型。与传统的值函数（<strong>Value-Based Learning</strong>）不同，策略梯度直接学习策略，通过优化策略网络的参数来最大化累积回报的期望值。</p>
+<p>它的基本思想是通过梯度上升的方式更新策略网络的参数，使得选择高回报的动作的概率增加，其余动作的概率减小，最大化累积回报的期望。</p>
+<p>❗️<strong>注意：</strong><font color="red"><strong>策略网络的输出是概率分布，而不是选择具体的某个动作</strong></font></p>
+<p>具体的流程如下：</p>
+<ol>
+<li>定义策略网络</li>
+<li>采样数据：策略网络是on-policy的策略</li>
+<li>计算损失函数</li>
+<li>更新策略网络参数</li>
+<li>重复步骤2-4</li>
+</ol>
+<h4 id="策略梯度如何off-policyproximal-policy-optimization-ppo"><strong>策略梯度如何Off-Policy——Proximal Policy Optimization (PPO)</strong></h4>
+<h5 id="代码详细解析"><strong>代码详细解析</strong></h5>
+<pre><code class="language-python">from typing import Optional, Tuple
+</code></pre>
+<p><code>typing</code>提供了一些工具和类，用于类型注解和类型提示。引入了一些类型相关概念，可以用于增强代码的可读性、可维护性和可靠性。通过在函数参数、返回值和变量声明中添加类型注解，提供更好的代码提示和类型检查支持。</p>
+<pre><code class="language-python">from collections import namedtuple
+import torch
+import numpy as np
+
+ppo_policy_data = namedtuple('ppo_policy_data', ['logit_new', 'logit_old', 'action', 'adv', 'weight'])
+ppo_policy_loss = namedtuple('ppo_policy_loss', ['policy_loss', 'entropy_loss'])
+ppo_info = namedtuple('ppo_info', ['approx_kl', 'clip_frac'])
+
+def ppo_policy_error(data: namedtuple, clip_ratio: float = 0.2, dual_clip: Optional[float] = None) -&gt; Tuple[namedtuple, namedtuple]:
+    logit_new, logit_old, action, adv, weight = data
+    weight = torch.ones_like(adv) if weight is None else weight
+    
+    dist_new = torch.distributions.categorical.Categorical(logit_new)
+    dist_old = torch.distributions.categorical.Categorical(logit_old)
+    logp_new = dist_new.log_prob(action)
+    logp_old = dist_old.log_prob(action)
+    
+    entropy_loss = (dist_new.entropy() * weight).mean()
+</code></pre>
+<p>ppo_policy_error主要用来计算策略的损失和相关信息，接受的参数<code>clip_ratio</code>是指可以接受的裁切的比例，<code>dual_clip</code>表示是否进行双向裁切。</p>
+<pre><code class="language-python">    ratio = torch.exp(logp_new - logp_old)      # 新策略与旧策略的概率比值的指数
+</code></pre>
+<p>在PPO中，使用指数函数的目的是为了保持比值的正数性质，并减少梯度的变化范围。直接相除得到的比值会包含正数和负数，而使用指数函数可以将比值映射到非负范围内。通过对比值应用指数函数，可以确保比值始终为正。</p>
+<p>此外，PPO算法中的目标是最大化比值，而不是最大化原始的概率比。这是因为直接最大化原始的概率比可能会导致策略更新过大，造成不稳定性和收敛性的问题。为了解决这个问题，PPO引入了裁剪机制，通过限制比值在一定范围内来控制策略更新的幅度，平衡策略的改进和稳定性之间的权衡。</p>
+<p>PPO算法的目标是在每次策略更新时最大化优势函数，以提高策略的性能。优势函数可以理解为新策略相较于旧策略的性能改进程度。使用新策略与旧策略概率的比值来度量改进的大小，可以将优势函数表达为比值乘以优势值。</p>
+<p>综上所述，PPO最大化比值是为了度量策略改进的大小，而通过剪切机制限制比值的范围，从而控制策略更新的幅度，保证算法的稳定性和收敛性。</p>
+<pre><code class="language-python">    surr1 = ratio * adv     # 未经裁剪的策略梯度项
+</code></pre>
+<p>这一行代码计算了未经剪切的策略梯度项。它将比值（ratio）与优势函数（adv）相乘得到未经剪切的策略梯度。比值（ratio）代表了新策略相对于旧策略的改进程度，而优势函数（adv）代表了当前策略相对于基准策略的性能差距。通过将二者相乘，可以得到未经剪切的策略梯度项。</p>
+<pre><code class="language-python">    surr2 = ratio.clamp(1 - clip_ratio, 1 + clip_ratio) * adv
+</code></pre>
+<p>这一行代码计算了经过剪切的策略梯度项。它首先通过使用clamp函数将比值（ratio）限制在一个预定义的范围内，即在1-clip_ratio和1+clip_ratio之间。这样做是为了控制策略更新的幅度，以避免更新过大。然后，将剪切后的比值与优势函数相乘，得到经过剪切的策略梯度项。</p>
+<p>上述的两行代码主要实现了下面的公式，使得新旧概率分布不会超过太大的范围，下面的公式也是PPO的主要部分：</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>min</mi><mo>⁡</mo><mo>(</mo><mfrac><mrow><msub><mi>π</mi><mi>θ</mi></msub><mo>(</mo><msub><mi>a</mi><mi>t</mi></msub><mi mathvariant="normal">∣</mi><msub><mi>s</mi><mi>t</mi></msub><mo>)</mo></mrow><mrow><msub><mi>π</mi><mi>θ</mi></msub><mo>(</mo><msub><mi>a</mi><mi>t</mi></msub><mi mathvariant="normal">∣</mi><msub><mi>s</mi><mi>t</mi></msub><mo>)</mo></mrow></mfrac><msup><mi>A</mi><mrow><mi>θ</mi><mi>k</mi></mrow></msup><mo>(</mo><msub><mi>s</mi><mi>t</mi></msub><mo separator="true">,</mo><msub><mi>a</mi><mi>t</mi></msub><mo>)</mo><mo separator="true">,</mo><mi>c</mi><mi>l</mi><mi>i</mi><mi>p</mi><mo>(</mo><mfrac><mrow><msub><mi>π</mi><mi>θ</mi></msub><mo>(</mo><msub><mi>a</mi><mi>t</mi></msub><mi mathvariant="normal">∣</mi><msub><mi>s</mi><mi>t</mi></msub><mo>)</mo></mrow><mrow><msub><mi>π</mi><mi>θ</mi></msub><mo>(</mo><msub><mi>a</mi><mi>t</mi></msub><mi mathvariant="normal">∣</mi><msub><mi>s</mi><mi>t</mi></msub><mo>)</mo></mrow></mfrac><mo separator="true">,</mo><mn>1</mn><mo>−</mo><mi>ϵ</mi><mo separator="true">,</mo><mn>1</mn><mo>+</mo><mi>ϵ</mi><mo>)</mo><msup><mi>A</mi><mrow><mi>θ</mi><mi>k</mi></mrow></msup><mo>(</mo><msub><mi>s</mi><mi>t</mi></msub><mo separator="true">,</mo><msub><mi>a</mi><mi>t</mi></msub><mo>)</mo><mo>)</mo></mrow><annotation encoding="application/x-tex">    \min(\frac{\pi_\theta(a_t|s_t)}{\pi_\theta(a_t|s_t)}A^{\theta{k}}(s_t,a_t),clip(\frac{\pi_\theta(a_t|s_t)}{\pi_\theta(a_t|s_t)},1-\epsilon,1+\epsilon)A^{\theta{k}}(s_t,a_t))
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.363em;vertical-align:-0.936em;"></span><span class="mop">min</span><span class="mopen">(</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.427em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.02778em;">θ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.02778em;">θ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord"><span class="mord mathdefault">A</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8991079999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.02778em;">θ</span><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span></span></span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">c</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">i</span><span class="mord mathdefault">p</span><span class="mopen">(</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.427em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.02778em;">θ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.02778em;">θ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">ϵ</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.149108em;vertical-align:-0.25em;"></span><span class="mord mathdefault">ϵ</span><span class="mclose">)</span><span class="mord"><span class="mord mathdefault">A</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8991079999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.02778em;">θ</span><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span></span></span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mclose">)</span></span></span></span></span></p>
+<pre><code class="language-python">    if dual_clip is not None:
+        clip1 = torch.min(surr1, surr2)
+        clip2 = torch.max(clip1, dual_clip * adv)
+        policy_loss = -(torch.where(adv &lt; 0, clip2, clip1) * weight).mean()
+    else:
+        policy_loss = (-torch.min(surr1, surr2) * weight).mean()
+</code></pre>
+<p>PPO的<strong>单向裁切</strong>（One-sided Clipping）使用了一个裁切比率<code>clip_ratio</code>来限制比值<code>ratio</code>的范围。在PPO的论文中，还提出了一种<strong>双向裁切</strong>（Two-sided Clipping）方法。该方法不止使用了<code>clip_ratio</code>来限制比值的范围，还引入了一个额外的裁切比值<code>dual_clip</code>来进一步限制策略梯度项。裁切后的策略梯度被计算为<code>torch.min(surr1, surr2)</code>和<code>torch.max(clip1, dual_clip * adv)</code>，其中<code>clip1</code>是<code>torch.min(surr1, surr2)</code>的结果，这意味着裁切后的策略梯度项不仅受到裁切比率的限制，还受到额外的裁切阈值的限制。</p>
+<p><code>policy_loss = -(torch.where(adv &lt; 0, clip2, clip1) * weight).mean()</code>是一个条件判断，当优势值（adv）小于0选择<code>clip2</code>作为损失项目，否则选择<code>clip1</code>作为损失项。这是因为裁切项clip2考虑了额外的裁切阈值（<code>dual_clip * adv</code>），可以更加保守地裁剪策略梯度。在优势值为负时，使用clip2可以避免过大的负向更新。</p>
+<pre><code class="language-python">    with torch.no_grad():
+        approx_kl = (logp_old - logp_new).mean().item()
+        clipped = ratio.gt(1 + clip_ratio) | ratio.lt(1 - clip_ratio)
+        clip_frac = torch.as_tensor(clipped).float().mean().item()
+</code></pre>
+<p>这部分代码使用<code>torch.no_grad()</code>上下文管理器计算近似 KL 散度和超出剪切比例的比例。，接下来的内容与梯度计算无关，因此使用上下文管理器提升效率。KL散度用于衡量两个概率分布之间的差异程度。<code>approx_kl</code>是新旧策略对数概率差的均值，<code>clip_frac</code>是比值<code>ratio</code>超出剪切比例范围的比例。最后，将计算得到的损失和信息打包为<code>ppo_policy_loss</code>和<code>ppo_info</code>对象，并返回。</p>
+<p><code>torch.as_tensor(clipped).float().mean().item()</code>中的<code>mean()</code>计算浮点张量的均值，即计算超出裁切范围的比值在整个张量中的比例。这个裁切比例<code>clip_frac</code>反映了在当前批次中，超出裁切范围的比值所占的比例。它用于评估裁切操作的频率和效果，以了解策略更新是否受到了有效的裁切限制。</p>
+<pre><code class="language-python">def test_ppo(clip_ratio, dual_clip):
+    B, N = 4, 32
+    logit_new = torch.randn(B, N).requires_grad_(True)
+    logit_old = logit_new + torch.rand_like(logit_new) * 0.1
+    action = torch.randint(0, N, size=(B, ))
+    adv = torch.rand(B)
+    data = ppo_policy_data(logit_new, logit_old, action, adv, None)
+    loss, info = ppo_policy_error(data, clip_ratio=clip_ratio, dual_clip=dual_clip)
+    assert all([np.isscalar(i) for i in info])
+    assert logit_new.grad is None
+    total_loss = sum(loss)
+    total_loss.backward()
+    assert isinstance(logit_new.grad, torch.Tensor)
+
+if __name__ == '__main__':
+    test_ppo(0.2, 0.5)
+</code></pre>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E7%9A%84%E4%B8%BB%E8%A6%81%E6%9E%84%E6%88%90">强化学习的主要构成</a></li>
+<li><a href="#%E6%80%8E%E4%B9%88%E8%AE%AD%E7%BB%83%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0">怎么训练强化学习</a></li>
+<li><a href="#%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E7%9A%84%E5%88%86%E7%B1%BB"><strong>强化学习的分类</strong></a>
+<ul>
+<li><a href="#%E5%80%BC%E6%9B%B4%E6%96%B0value-based-learning"><strong>值更新（Value-based Learning）</strong></a>
+<ul>
+<li><a href="#%E7%8A%B6%E6%80%81%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0state-value-function"><strong>状态价值函数（State-value Function）</strong></a></li>
+<li><a href="#%E5%8A%A8%E4%BD%9C%E7%8A%B6%E6%80%81%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0action-state-value-function"><strong>动作状态价值函数（Action-State Value Function）</strong></a></li>
+</ul>
+</li>
+<li><a href="#%E7%AD%96%E7%95%A5%E6%9B%B4%E6%96%B0policy-based-learning"><strong>策略更新（Policy-Based Learning）</strong></a>
+<ul>
+<li><a href="#%E7%AD%96%E7%95%A5%E6%9B%B4%E6%96%B0%E7%9A%84%E5%87%A0%E5%A4%A7%E7%AE%97%E6%B3%95"><strong>策略更新的几大算法</strong></a>
+<ul>
+<li><a href="#%E7%AD%96%E7%95%A5%E6%A2%AF%E5%BA%A6policy-gradientpg"><strong>策略梯度（Policy Gradient/PG）</strong></a></li>
+<li><a href="#%E7%AD%96%E7%95%A5%E6%A2%AF%E5%BA%A6%E5%A6%82%E4%BD%95off-policyproximal-policy-optimization-ppo"><strong>策略梯度如何Off-Policy——Proximal Policy Optimization (PPO)</strong></a>
+<ul>
+<li><a href="#%E4%BB%A3%E7%A0%81%E8%AF%A6%E7%BB%86%E8%A7%A3%E6%9E%90"><strong>代码详细解析</strong></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://GinWithoutA.github.io/post/qiang-hua-xue-xi-cong-wa-keng-dao-ru-keng-dao-la-shi-dao-ru-tu-ru-keng-qian-qing-xian-wa-keng/">
+              <h3 class="post-title">
+                强化学习（从挖坑到入坑到拉屎到入土）（入坑前请先挖坑）（OpenAI-Spinning Up &amp; 西湖大学）
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://GinWithoutA.github.io//atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

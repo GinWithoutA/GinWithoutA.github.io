@@ -1,0 +1,325 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>JAVA 从零到一（零点一） | GinWithoutA的随笔空间</title>
+<link rel="shortcut icon" href="https://GinWithoutA.github.io//favicon.ico?v=1693915246477">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://GinWithoutA.github.io//styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="JAVA 从零到一（零点一） | GinWithoutA的随笔空间 - Atom Feed" href="https://GinWithoutA.github.io//atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="1、JDK和JRE
+JDK（Java Development Kit）：JAVA开发工具包
+
+JRE（Java Runtime Environment）：JAVA的运行环境
+
+2、注释
+    // 单行注释
+
+    /*
+     * ..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://GinWithoutA.github.io/">
+  <img class="avatar" src="https://GinWithoutA.github.io//images/avatar.png?v=1693915246477" alt="">
+  </a>
+  <h1 class="site-title">
+    GinWithoutA的随笔空间
+  </h1>
+  <p class="site-description">
+    什么都写写
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              JAVA 从零到一（零点一）
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-01-15
+              </span>
+              <span>
+                5 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <h1 id="1-jdk和jre">1、JDK和JRE</h1>
+<p><strong>JDK（Java Development Kit）</strong>：JAVA开发工具包<br>
+<img src="https://GinWithoutA.github.io//post-images/1675762673491.png" alt="" loading="lazy"><br>
+<strong>JRE（Java Runtime Environment）</strong>：JAVA的运行环境<br>
+<img src="https://GinWithoutA.github.io//post-images/1675762778843.png" alt="" loading="lazy"></p>
+<h1 id="2-注释">2、注释</h1>
+<pre><code class="language-java">    // 单行注释
+
+    /*
+     * 多行注释
+    */
+
+    /**
+       * 文档注释
+    **/
+</code></pre>
+<h1 id="3-关键字被java赋予了特定含义的英文单词不同于变量名以及方法名">3、关键字：被JAVA赋予了特定含义的英文单词（不同于变量名以及方法名）</h1>
+<h1 id="4-字面量数据在程序中的书写格式">4、字面量：数据在程序中的书写格式</h1>
+<p><img src="https://GinWithoutA.github.io//post-images/1675763276184.png" alt="" loading="lazy"><br>
+<strong>\t</strong>：在打印的时候，把前面字符串的长度补齐到8或者8的倍数，最少补一个空格，最多补8个空格<img src="https://GinWithoutA.github.io//post-images/1675763556568.png" alt="" loading="lazy"></p>
+<h1 id="5-变量的注意事项font-colordd0000变量在使用前一定要进行赋值font"><strong>5、变量的注意事项：<font color="#dd0000">变量在使用前一定要进行赋值</font></strong></h1>
+<h1 id="6-计算机的存储规则"><strong>6、计算机的存储规则</strong></h1>
+<p>在计算机中只有三种类型的数据：<strong>文本、图片、声音</strong><br>
+<strong>不同进制在代码中的表现形式：</strong></p>
+<ul>
+<li>二进制：代码中以<font color="#dd0000">0b</font>开头</li>
+<li>八进制：代码中以<font color="#dd0000">0</font>开头</li>
+<li>十六进制：代码中以<font color="#dd0000">0x</font>开头<br>
+十进制转化为其他进制：除基取余法（余数倒着拼接）<br>
+汉字存储表：GB2312编码——GBK编码——Unicode编码（万国码表）</li>
+</ul>
+<h1 id="7-数据类型"><strong>7、数据类型</strong></h1>
+<p><strong>基本数据类型</strong><br>
+<img src="https://GinWithoutA.github.io//post-images/1675766564605.png" alt="" loading="lazy"><br>
+<strong>引用数据类型</strong>：只要是通过new生成的都是引用数据类型，String也是引用数据类型</p>
+<h2 id="1隐式转换和显示转换"><strong>（1）隐式转换和显示转换</strong></h2>
+<p>隐式转换：把一个取值范围小的数值，转成取值范围大的数据，当出现byte、short、char三种类型的数据运算时，会直接提升为int，再进行运算<br>
+显示转换：取值范围大的数转换为取值范围小的数据</p>
+<h1 id="8-运算符"><strong>8、运算符</strong></h1>
+<h2 id="1逻辑运算符"><strong>（1）逻辑运算符</strong></h2>
+<p>逻辑运算符有四种，与或非以及抑或<img src="https://GinWithoutA.github.io//post-images/1675826229014.png" alt="" loading="lazy"><br>
+短路逻辑运算符有两种，短路与以及短路或<img src="https://GinWithoutA.github.io//post-images/1675826193931.png" alt="" loading="lazy"></p>
+<h2 id="2三元运算符"><strong>（2）三元运算符</strong></h2>
+<p>又叫三元表达式</p>
+<pre><code class="language-java">    a &gt; b ? c : d;
+</code></pre>
+<h2 id="3运算符优先级"><strong>（3）运算符优先级</strong></h2>
+<figure data-type="image" tabindex="1"><img src="https://GinWithoutA.github.io//post-images/1675826523974.png" alt="" loading="lazy"></figure>
+<h2 id="4其他运算符"><strong>（4）其他运算符</strong></h2>
+<figure data-type="image" tabindex="2"><img src="https://GinWithoutA.github.io//post-images/1675828403377.png" alt="" loading="lazy"></figure>
+<h1 id="9-原码-反码-补码"><strong>9、原码、反码、补码</strong></h1>
+<p><strong>1个bit只能存储0或者1，8个bit是一个字节，<font color="#dd0000">他是计算机的最小存储单元</font></strong><br>
+原码负数的计算会有问题，例如-1+1利用原码表示结果为-2<br>
+反码的出现是为了解决原码的负数计算问题，负数的计算需要将原码转为反码之后计算，但是若运算时结果跨0会产生一个误差，因为存在+0以及-0<br>
+补码的出现为了解决反码中存在的两个0，补码会对反码+1，从而错开，屏蔽两个0的现象，<strong><font color="#dd0000">程序中的负数都用补码进行存储</font></strong><br>
+<img src="https://GinWithoutA.github.io//post-images/1675827616203.png" alt="" loading="lazy"><br>
+<strong>从而可以解释不同数据类型之间的转换，隐式转换就是数据前面补0，强制转换就是去掉前面多余的0，剩下的数据就是转换后的</strong></p>
+<h1 id="10-switch语句jdk-12-之后新写法"><strong>10、switch语句（JDK 12 之后新写法）</strong></h1>
+<pre><code class="language-java">    switch (x) {
+        case 1 -&gt; {
+            // 写内容
+        }
+        case 2 -&gt; {
+            // 写内容
+        }
+        default -&gt; {
+            // 写内容
+        }
+    }
+</code></pre>
+<h1 id="11-方法的重载"><strong>11、方法的重载</strong></h1>
+<p>方法名称相同，参数个数不同的方法构成重载，与返回值无关</p>
+<h1 id="12-this"><strong>12、this</strong></h1>
+<p>this存放的是方法调用者的地址值</p>
+<h1 id="13-string"><strong>13、String</strong></h1>
+<p>1、创建String对象的两种方式<br>
+（1）直接赋值<br>
+（2）new<br>
+<img src="https://GinWithoutA.github.io//post-images/1676280670313.png" alt="" loading="lazy"><br>
+2、String在内存中的存储方式<br>
+（1）直接赋值：<br>
+直接赋值的String会存放在StringTable串池中，存放在堆中，若创建的String变量中的值在串池中存在，则赋值串池中的已存在字符串的地址<br>
+（2）new<br>
+动态开辟空间，不存放于串池中<br>
+3、JDK8之前的字符串拼接的底层原理<br>
+（1）若拼接的对象全部为字符，则在编译的时候就会将最终结果保存并存入串池，若串池中有，则直接赋值串池地址</p>
+<pre><code class="language-java">    /*
+     * 在这过程中至少存在
+    */
+    String s = &quot;ab&quot; + &quot;cd&quot; + &quot;ef&quot;;
+</code></pre>
+<p>（2）若拼接的对象为变量加字符，则每次拼接会生成有一个StringBuilder对象，最终底层帮我们转为String对象</p>
+<pre><code class="language-java">    /*
+     * 一个加号就创建两个对象
+    */
+    String s = &quot;ab&quot;;
+    String ss = s + &quot;cd&quot;;
+</code></pre>
+<p>4、JDK8之后的字符串拼接的底层原理<br>
+（1）若拼接的对象全部为字符，不变<br>
+（2）若拼接的对象为变量加字符，则拼接的时候会预估字符串的长度，并开辟数组进行存放，最终转为String对象</p>
+<pre><code class="language-java">    /*
+     * 预估4个单位
+    */
+    String s = &quot;ab&quot;;
+    String ss = s + &quot;cd&quot;;
+</code></pre>
+<h1 id="14-stringbuilder"><strong>14、StringBuilder</strong></h1>
+<p>相较于String，可以把StringBuilder看作是一个容器，内容可以变化主要用于提高字符串的操作效率<br>
+默认会创建长度为16的字节数组，若存储的容量超过，则会扩容（原容量*2+2），若还超过就直接开辟一个实际长度的数组</p>
+<h1 id="15-stringjoiner"><strong>15、StringJoiner</strong></h1>
+<p>可以看作是有格式控制的StringBuilder，可以指定拼接的样式</p>
+<pre><code class="language-java">    /*
+     * 第一个参数指定每个元素之间的间隔符号
+     * 第二个第三个参数指定开头和结尾符号
+    */
+    StringJoiner sj = new StringJoiner(',', '[', ']');
+</code></pre>
+<h1 id="16-静态变量"><strong>16、静态变量</strong></h1>
+<p>静态变量优先于对象出现，随着类的字节码文件进入方法区，类中的静态变量就会在堆内存中产生<br>
+静态方法只能访问静态变量和静态方法<br>
+非静态方法可以访问静态变量和静态方法，也可以访问非静态的成员变量和非静态的成员方法<br>
+静态方法中没有this关键字</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#1-jdk%E5%92%8Cjre">1、JDK和JRE</a></li>
+<li><a href="#2-%E6%B3%A8%E9%87%8A">2、注释</a></li>
+<li><a href="#3-%E5%85%B3%E9%94%AE%E5%AD%97%E8%A2%ABjava%E8%B5%8B%E4%BA%88%E4%BA%86%E7%89%B9%E5%AE%9A%E5%90%AB%E4%B9%89%E7%9A%84%E8%8B%B1%E6%96%87%E5%8D%95%E8%AF%8D%E4%B8%8D%E5%90%8C%E4%BA%8E%E5%8F%98%E9%87%8F%E5%90%8D%E4%BB%A5%E5%8F%8A%E6%96%B9%E6%B3%95%E5%90%8D">3、关键字：被JAVA赋予了特定含义的英文单词（不同于变量名以及方法名）</a></li>
+<li><a href="#4-%E5%AD%97%E9%9D%A2%E9%87%8F%E6%95%B0%E6%8D%AE%E5%9C%A8%E7%A8%8B%E5%BA%8F%E4%B8%AD%E7%9A%84%E4%B9%A6%E5%86%99%E6%A0%BC%E5%BC%8F">4、字面量：数据在程序中的书写格式</a></li>
+<li><a href="#5-%E5%8F%98%E9%87%8F%E7%9A%84%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9font-colordd0000%E5%8F%98%E9%87%8F%E5%9C%A8%E4%BD%BF%E7%94%A8%E5%89%8D%E4%B8%80%E5%AE%9A%E8%A6%81%E8%BF%9B%E8%A1%8C%E8%B5%8B%E5%80%BCfont"><strong>5、变量的注意事项：<font color="#dd0000">变量在使用前一定要进行赋值</font></strong></a></li>
+<li><a href="#6-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%9A%84%E5%AD%98%E5%82%A8%E8%A7%84%E5%88%99"><strong>6、计算机的存储规则</strong></a></li>
+<li><a href="#7-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><strong>7、数据类型</strong></a>
+<ul>
+<li><a href="#1%E9%9A%90%E5%BC%8F%E8%BD%AC%E6%8D%A2%E5%92%8C%E6%98%BE%E7%A4%BA%E8%BD%AC%E6%8D%A2"><strong>（1）隐式转换和显示转换</strong></a></li>
+</ul>
+</li>
+<li><a href="#8-%E8%BF%90%E7%AE%97%E7%AC%A6"><strong>8、运算符</strong></a>
+<ul>
+<li><a href="#1%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97%E7%AC%A6"><strong>（1）逻辑运算符</strong></a></li>
+<li><a href="#2%E4%B8%89%E5%85%83%E8%BF%90%E7%AE%97%E7%AC%A6"><strong>（2）三元运算符</strong></a></li>
+<li><a href="#3%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BC%98%E5%85%88%E7%BA%A7"><strong>（3）运算符优先级</strong></a></li>
+<li><a href="#4%E5%85%B6%E4%BB%96%E8%BF%90%E7%AE%97%E7%AC%A6"><strong>（4）其他运算符</strong></a></li>
+</ul>
+</li>
+<li><a href="#9-%E5%8E%9F%E7%A0%81-%E5%8F%8D%E7%A0%81-%E8%A1%A5%E7%A0%81"><strong>9、原码、反码、补码</strong></a></li>
+<li><a href="#10-switch%E8%AF%AD%E5%8F%A5jdk-12-%E4%B9%8B%E5%90%8E%E6%96%B0%E5%86%99%E6%B3%95"><strong>10、switch语句（JDK 12 之后新写法）</strong></a></li>
+<li><a href="#11-%E6%96%B9%E6%B3%95%E7%9A%84%E9%87%8D%E8%BD%BD"><strong>11、方法的重载</strong></a></li>
+<li><a href="#12-this"><strong>12、this</strong></a></li>
+<li><a href="#13-string"><strong>13、String</strong></a></li>
+<li><a href="#14-stringbuilder"><strong>14、StringBuilder</strong></a></li>
+<li><a href="#15-stringjoiner"><strong>15、StringJoiner</strong></a></li>
+<li><a href="#16-%E9%9D%99%E6%80%81%E5%8F%98%E9%87%8F"><strong>16、静态变量</strong></a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://GinWithoutA.github.io/post/hello-gridea - 副本/">
+              <h3 class="post-title">
+                Hello Gridea
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://GinWithoutA.github.io//atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

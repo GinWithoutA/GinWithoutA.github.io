@@ -1,0 +1,186 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>各类问题的小合集 | GinWithoutA的随笔空间</title>
+<link rel="shortcut icon" href="https://GinWithoutA.github.io//favicon.ico?v=1693915246477">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://GinWithoutA.github.io//styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="各类问题的小合集 | GinWithoutA的随笔空间 - Atom Feed" href="https://GinWithoutA.github.io//atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="Windows 倒腾 WSL2 的一些小东西
+各类软件的远程访问
+要把WSL绑定到宿主机上再进行远程访问。
+netsh interface portproxy add v4tov4 listenport=[port] listenaddre..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://GinWithoutA.github.io/">
+  <img class="avatar" src="https://GinWithoutA.github.io//images/avatar.png?v=1693915246477" alt="">
+  </a>
+  <h1 class="site-title">
+    GinWithoutA的随笔空间
+  </h1>
+  <p class="site-description">
+    什么都写写
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              各类问题的小合集
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-04-03
+              </span>
+              <span>
+                1 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <h1 id="windows-倒腾-wsl2-的一些小东西"><strong>Windows 倒腾 WSL2 的一些小东西</strong></h1>
+<h1 id="各类软件的远程访问"><strong>各类软件的远程访问</strong></h1>
+<p>要把WSL绑定到宿主机上再进行远程访问。</p>
+<pre><code>netsh interface portproxy add v4tov4 listenport=[port] listenaddress=0.0.0.0 connecport=[port] connectaddress=[WSL IP]
+</code></pre>
+<h1 id="搭建gymnasium环境出现的问题"><strong>搭建Gymnasium环境出现的问题</strong></h1>
+<p>我是win11然后在anaconda里面搭了个虚拟环境，python版本是3.10.10，执行下面命令的时候会出现问题：</p>
+<pre><code class="language-cmd">    pip install &quot;gymnasium[all]&quot;
+</code></pre>
+<p>安装到<code>box2d-py</code>的时候会报错说<strong>building wheel for box2d-py failed</strong>，搞了我好久，终于搞懂：</p>
+<ol>
+<li>需要在本机上安装<strong>swig</strong>，这个的安装方法只需要去官网下载win的安装包，然后解压后系统环境的path里面配置解压后的<strong>swig.exe</strong>就行；</li>
+<li>需要<strong>Microsoft Visual C++ 14.0 or greater</strong>，这个的话就去Microsoft官网下载MSVC就行，除了默认的，选择自己系统的SDK加上MSVC生成工具就行</li>
+</ol>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#windows-%E5%80%92%E8%85%BE-wsl2-%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E4%B8%9C%E8%A5%BF"><strong>Windows 倒腾 WSL2 的一些小东西</strong></a></li>
+<li><a href="#%E5%90%84%E7%B1%BB%E8%BD%AF%E4%BB%B6%E7%9A%84%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE"><strong>各类软件的远程访问</strong></a></li>
+<li><a href="#%E6%90%AD%E5%BB%BAgymnasium%E7%8E%AF%E5%A2%83%E5%87%BA%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98"><strong>搭建Gymnasium环境出现的问题</strong></a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://GinWithoutA.github.io/post/qiang-hua-xue-xi-cong-ru-men-dao-ru-tu/">
+              <h3 class="post-title">
+                强化学习（从入门到入坑到拉屎到入土）（今天先入门）
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://GinWithoutA.github.io//atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

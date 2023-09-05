@@ -1,0 +1,302 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>梦回JAVA之Spring篇（研究生毕业秋招找面试） | GinWithoutA的随笔空间</title>
+<link rel="shortcut icon" href="https://GinWithoutA.github.io//favicon.ico?v=1693915246477">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://GinWithoutA.github.io//styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="梦回JAVA之Spring篇（研究生毕业秋招找面试） | GinWithoutA的随笔空间 - Atom Feed" href="https://GinWithoutA.github.io//atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="Spring的基础
+Spring如何创建bean？
+
+加载bean.xml配置文件
+对xml文件进行解析操作
+获取xml文件bean标签属性值，id属性值和class属性值
+使用反射根据类全路径
+
+public void testRefle..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://GinWithoutA.github.io/">
+  <img class="avatar" src="https://GinWithoutA.github.io//images/avatar.png?v=1693915246477" alt="">
+  </a>
+  <h1 class="site-title">
+    GinWithoutA的随笔空间
+  </h1>
+  <p class="site-description">
+    什么都写写
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              梦回JAVA之Spring篇（研究生毕业秋招找面试）
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-07-07
+              </span>
+              <span>
+                5 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <h1 id="spring的基础">Spring的基础</h1>
+<h2 id="spring如何创建bean"><strong>Spring如何创建bean？</strong></h2>
+<ol>
+<li>加载<code>bean.xml</code>配置文件</li>
+<li>对<code>xml</code>文件进行解析操作</li>
+<li>获取<code>xml</code>文件<code>bean</code>标签属性值，<code>id</code>属性值和<code>class</code>属性值</li>
+<li>使用反射根据类全路径</li>
+</ol>
+<pre><code class="language-java">public void testReflect() throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        Class clazz = Class.forName(&quot;com.ginwithouta.User&quot;);
+        User user = (User)clazz.getDeclaredConstructor().newInstance();
+        System.out.println(user);
+    }
+</code></pre>
+<h2 id="spring创建好的bean应该放到哪里"><strong>Spring创建好的bean应该放到哪里？</strong></h2>
+<p>在Spring的源码中，放到了一个叫做<code>BeanDefinition</code>的<code>Map</code>中</p>
+<pre><code class="language-java">private final Map&lt;String, BeanDefinition&gt; beanDefinition
+</code></pre>
+<h2 id="spring的ioc"><strong>Spring的IoC</strong></h2>
+<h3 id="ioc"><strong>IoC</strong></h3>
+<p><strong>IoC</strong>是<strong>Inversion of Control</strong>的缩写，也叫做<strong>控制反转</strong>，他是一种思想。可以理解为以前我们都主动控制是否进行新对象的创建，现在交给spring来控制是否要使用新的对象。同时，对象之间的依赖关系也交由Spring进行管理。</p>
+<p>大致的流程就是通过<code>xml</code>定义<code>Bean</code>，然后使用Spring中提供的<code>BeanDefinition</code>以及<code>BeanDefinitionReader</code>去读取，把他放到一个工厂<code>BeanFactory</code>，同时利用Java的反射机制，等待被实际使用。<br>
+<img src="https://GinWithoutA.github.io//post-images/1688721713827.png" alt="" loading="lazy"></p>
+<h3 id="依赖注入"><strong>依赖注入</strong></h3>
+<ul>
+<li><strong>DI（Dependency Injection）</strong>：依赖注入，它实现了控制反转这个思想<br>
+依赖注入的方式一般有两种：</li>
+</ul>
+<ol>
+<li>Setter</li>
+<li>构造注入</li>
+</ol>
+<h4 id="属性的注入之map和list的注入"><strong>属性的注入之Map和List的注入</strong></h4>
+<p>可以使用传统的方法，也可以使用标签进行（下面只演示标签）：</p>
+<pre><code class="language-xml">&lt;!--list集合类型的bean--&gt;
+&lt;util:list id=&quot;students&quot;&gt;
+    &lt;ref bean=&quot;studentOne&quot;&gt;&lt;/ref&gt;
+    &lt;ref bean=&quot;studentTwo&quot;&gt;&lt;/ref&gt;
+    &lt;ref bean=&quot;studentThree&quot;&gt;&lt;/ref&gt;
+&lt;/util:list&gt;
+&lt;!--map集合类型的bean--&gt;
+&lt;util:map id=&quot;teacherMap&quot;&gt;
+    &lt;entry&gt;
+        &lt;key&gt;
+            &lt;value&gt;10010&lt;/value&gt;
+        &lt;/key&gt;
+        &lt;ref bean=&quot;teacherOne&quot;&gt;&lt;/ref&gt;
+    &lt;/entry&gt;
+    &lt;entry&gt;
+        &lt;key&gt;
+            &lt;value&gt;10086&lt;/value&gt;
+        &lt;/key&gt;
+        &lt;ref bean=&quot;teacherTwo&quot;&gt;&lt;/ref&gt;
+    &lt;/entry&gt;
+&lt;/util:map&gt;
+</code></pre>
+<p>注意，使用上面的标需要加上对应的约束：</p>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+       xmlns:util=&quot;http://www.springframework.org/schema/util&quot;
+       xsi:schemaLocation=&quot;http://www.springframework.org/schema/util
+       http://www.springframework.org/schema/util/spring-util.xsd
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
+</code></pre>
+<h4 id="属性的注入之使用p命名空间进行注入"><strong>属性的注入之使用p命名空间进行注入</strong></h4>
+<p>这里的<code>p</code>就相当于一个实例的代号，看代码就知道了：</p>
+<pre><code class="language-xml">&lt;bean id=&quot;studentSix&quot; class=&quot;com.atguigu.spring6.bean.Student&quot;
+    p:id=&quot;1006&quot; p:name=&quot;小明&quot; p:clazz-ref=&quot;clazzOne&quot; p:teacherMap-ref=&quot;teacherMap&quot;&gt;&lt;/bean&gt;
+</code></pre>
+<h3 id="spring中ioc的实现方式"><strong>Spring中IoC的实现方式</strong></h3>
+<p>在Spring中，首先是创建了一个<code>BeanFactory</code>容器，用于存放各种Bean。由于它不是提供给开发人员使用的，Spring又额外写了一个<code>Application</code>来提供更多高级功能供开发者管理这些Bean。</p>
+<h3 id="spring中bean的作用域"><strong>Spring中Bean的作用域</strong></h3>
+<p>可以使用<code>scope</code>属性来指定作用域的范围。</p>
+<ul>
+<li><code>singleton</code>：在IoC容器进行初始化时就进行创建，并且这个bean始终是单实例</li>
+<li><code>prototype</code>：在获取Bean的时候才进行创建，并且有多个实例</li>
+</ul>
+<pre><code class="language-xml">&lt;bean ..... scope=&quot;prototype&quot;&gt;&lt;/bean&gt;
+</code></pre>
+<h3 id="spring中bean的生命周期"><strong>Spring中Bean的生命周期</strong></h3>
+<ul>
+<li>bean对象创建（<strong>调用无参构造器</strong>）</li>
+<li>给bean对象设置属性</li>
+<li>bean的后置处理器（<strong>初始化之前</strong>）</li>
+<li>bean对象初始化（<strong>需在配置bean时指定初始化方法</strong>）</li>
+<li>bean的后置处理器（<strong>初始化之后</strong>）</li>
+<li>bean对象就绪可以使用</li>
+<li>bean对象销毁（<strong>需在配置bean时指定销毁方法</strong>）</li>
+<li>IOC容器关闭</li>
+</ul>
+<h3 id="spring中的注解"><strong>Spring中的注解</strong></h3>
+<ul>
+<li><code>@Component</code>：该注解用于描述 Spring 中的 Bean，它是一个泛化的概念，仅仅表示容器中的一个组件（Bean），并且可以作用在应用的任何层次，例如 Service 层、Dao 层等。 使用时只需将该注解标注在相应类上即可。</li>
+<li><code>@Repository</code>：</li>
+<li><code>@Service</code>：</li>
+<li><code>@Controller</code></li>
+</ul>
+<h1 id="spring配套工具">Spring配套工具</h1>
+<h2 id="log4j2日志信息的优先级"><strong>Log4j2日志信息的优先级</strong></h2>
+<p>一般来说有五个级别，分别是：<strong>TRACE&lt;DEBUG&lt;INFO&lt;WARN&lt;ERROR&lt;FATAL</strong></p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#spring%E7%9A%84%E5%9F%BA%E7%A1%80">Spring的基础</a>
+<ul>
+<li><a href="#spring%E5%A6%82%E4%BD%95%E5%88%9B%E5%BB%BAbean"><strong>Spring如何创建bean？</strong></a></li>
+<li><a href="#spring%E5%88%9B%E5%BB%BA%E5%A5%BD%E7%9A%84bean%E5%BA%94%E8%AF%A5%E6%94%BE%E5%88%B0%E5%93%AA%E9%87%8C"><strong>Spring创建好的bean应该放到哪里？</strong></a></li>
+<li><a href="#spring%E7%9A%84ioc"><strong>Spring的IoC</strong></a>
+<ul>
+<li><a href="#ioc"><strong>IoC</strong></a></li>
+<li><a href="#%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5"><strong>依赖注入</strong></a>
+<ul>
+<li><a href="#%E5%B1%9E%E6%80%A7%E7%9A%84%E6%B3%A8%E5%85%A5%E4%B9%8Bmap%E5%92%8Clist%E7%9A%84%E6%B3%A8%E5%85%A5"><strong>属性的注入之Map和List的注入</strong></a></li>
+<li><a href="#%E5%B1%9E%E6%80%A7%E7%9A%84%E6%B3%A8%E5%85%A5%E4%B9%8B%E4%BD%BF%E7%94%A8p%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E8%BF%9B%E8%A1%8C%E6%B3%A8%E5%85%A5"><strong>属性的注入之使用p命名空间进行注入</strong></a></li>
+</ul>
+</li>
+<li><a href="#spring%E4%B8%ADioc%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F"><strong>Spring中IoC的实现方式</strong></a></li>
+<li><a href="#spring%E4%B8%ADbean%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F"><strong>Spring中Bean的作用域</strong></a></li>
+<li><a href="#spring%E4%B8%ADbean%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><strong>Spring中Bean的生命周期</strong></a></li>
+<li><a href="#spring%E4%B8%AD%E7%9A%84%E6%B3%A8%E8%A7%A3"><strong>Spring中的注解</strong></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#spring%E9%85%8D%E5%A5%97%E5%B7%A5%E5%85%B7">Spring配套工具</a>
+<ul>
+<li><a href="#log4j2%E6%97%A5%E5%BF%97%E4%BF%A1%E6%81%AF%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7"><strong>Log4j2日志信息的优先级</strong></a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://GinWithoutA.github.io/post/hong-zha-li-jie-shen-du-xue-xi-li-mian-de-encoder-decoder-mo-xing/">
+              <h3 class="post-title">
+                轰炸理解深度学习里面的Encoder-Decoder模型
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://GinWithoutA.github.io//atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

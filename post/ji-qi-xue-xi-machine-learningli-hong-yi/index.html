@@ -1,0 +1,214 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>机器学习 Machine Learning（李宏毅） | GinWithoutA的随笔空间</title>
+<link rel="shortcut icon" href="https://GinWithoutA.github.io//favicon.ico?v=1693915246477">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://GinWithoutA.github.io//styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="机器学习 Machine Learning（李宏毅） | GinWithoutA的随笔空间 - Atom Feed" href="https://GinWithoutA.github.io//atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="
+
+将xxx叫做Feature，并把所有的其他参数变成一个列向量，如下，可以得到新的带有未知参数的函数。
+
+那么有了新的Function，Loss的定义也和之前没有大差别
+
+最后一步，就是优化，和之前一样，没有大的差别，用Graident ..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://GinWithoutA.github.io/">
+  <img class="avatar" src="https://GinWithoutA.github.io//images/avatar.png?v=1693915246477" alt="">
+  </a>
+  <h1 class="site-title">
+    GinWithoutA的随笔空间
+  </h1>
+  <p class="site-description">
+    什么都写写
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              机器学习 Machine Learning（李宏毅）
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-06-09
+              </span>
+              <span>
+                3 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <p><img src="https://GinWithoutA.github.io//post-images/1686628381229.png" alt="" loading="lazy"><br>
+<img src="https://GinWithoutA.github.io//post-images/1686628480447.png" alt="" loading="lazy"><br>
+将<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span>叫做Feature，并把所有的其他参数变成一个列向量，如下，可以得到新的带有未知参数的函数。<br>
+<img src="https://GinWithoutA.github.io//post-images/1686628485332.png" alt="" loading="lazy"><br>
+那么有了新的Function，Loss的定义也和之前没有大差别<br>
+<img src="https://GinWithoutA.github.io//post-images/1686635010241.png" alt="" loading="lazy"><br>
+最后一步，就是优化，和之前一样，没有大的差别，用Graident Descent<br>
+<img src="https://GinWithoutA.github.io//post-images/1686635141117.png" alt="" loading="lazy"><br>
+<img src="https://GinWithoutA.github.io//post-images/1686635201345.png" alt="" loading="lazy"><br>
+直到你不想进行Descent了，那么优化就停止了。实际上在做Gradient Descent的时候，会把所有的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span></span></span></span>笔资料分成一个一个的<strong>Batch</strong>，那么在原来我们会计算所有<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span></span></span></span>笔资料的<strong>总的Loss</strong>，现在的话我们就计算<strong>每个Batch的Loss</strong>。计算完一个Loss之后，我们就<strong>update</strong>一次参数，在下一次，我们会使用下一个Batch，计算Loss接着更新参数。重复刚才的过程，直到所有的Batch全部使用完一次，这样的一整个流程，叫做一个<strong>Epoch</strong>。<br>
+<img src="https://GinWithoutA.github.io//post-images/1686635443785.png" alt="" loading="lazy"><br>
+不仅如此，我们还可以对模型进行更多的变形。比如说将<strong>Sigmoid变成ReLU</strong>。同时，Sigmoid函数也可以看成是两个ReLU函数的合体。<br>
+<img src="https://GinWithoutA.github.io//post-images/1686635840764.png" alt="" loading="lazy"><br>
+<img src="https://GinWithoutA.github.io//post-images/1686635894658.png" alt="" loading="lazy"><br>
+还可以继续修改模型（增加层数）。。。<br>
+<img src="https://GinWithoutA.github.io//post-images/1686635968468.png" alt="" loading="lazy"><br>
+上面的这些Sigmoid或者ReLU就叫做Neuron，合起来的整个函数我们就叫Neural Network。（<strong>Fancy Name</strong>）同时，每一排的Neural就叫做<strong>Hidden Layer</strong>。<br>
+<img src="https://GinWithoutA.github.io//post-images/1686636218181.png" alt="" loading="lazy"><br>
+但是如果太Deep了会怎么样？<strong>OVERFITTING！！！</strong></p>
+<h1 id="error的来源bias和varience">Error的来源：Bias和Varience</h1>
+<p>模型中Error的来源一般有两个，一个<strong>Bias</strong>，一个<strong>Varience</strong>。Bias表示你的模型和所想要的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>f</mi><mo>∗</mo></msup></mrow><annotation encoding="application/x-tex">f^*</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.688696em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span></span></span></span>的差别有多少。当你的模型还不能够很好的fit你的Training Data的时候，它有着较大的<strong>Bias</strong>，同时也叫做<strong>Underfitting</strong>。此时你要做的，<strong>是去重新设计你的模型</strong>。</p>
+<p>相反，当你的模型很Fit你的Training Data，然后在进行Tesing的时候发现并不理想，这说明你的模型的<strong>Variance</strong>很大，导致说一点输入的改变就会很容易带来很大的结果的改变，这通常称之为<strong>Overfitting</strong>，也叫过拟合。这时候你需要做的，有一种是获取更多的Data，另一种是<strong>Regularization</strong>，它会希望找出来的函数越平滑越好。</p>
+<h1 id="gradient-descent">Gradient Descent</h1>
+<p><img src="https://GinWithoutA.github.io//post-images/1686294733839.png" alt="" loading="lazy"><br>
+Learning Rate的修改有一种好的方法是让他Adaptive地调整，让他初始的LR比较大，随着Training的进行让他慢慢缩小。其中一个好的方法是<strong>Adagrad</strong>。<br>
+<img src="https://GinWithoutA.github.io//post-images/1686295342825.png" alt="" loading="lazy"><br>
+<img src="https://GinWithoutA.github.io//post-images/1686295403786.png" alt="" loading="lazy"></p>
+<h1 id="gradient-descent-tipstochastic-gradient-descent">Gradient Descent Tip：Stochastic Gradient Descent</h1>
+<p>也就是我们看完所有的example之后再进行更新，而是每看到一个Example就进行一次更行，相比于普通的Gradient Descent，能够有更多的更新，更快到达所想要的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>f</mi><mo>∗</mo></msup></mrow><annotation encoding="application/x-tex">f^*</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.688696em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span></span></span></span>。<br>
+<img src="https://GinWithoutA.github.io//post-images/1686296265985.png" alt="" loading="lazy"><br>
+<img src="https://GinWithoutA.github.io//post-images/1686296402695.png" alt="" loading="lazy"></p>
+<h1 id="feature-scaling">Feature Scaling</h1>
+<figure data-type="image" tabindex="1"><img src="https://GinWithoutA.github.io//post-images/1686297706104.png" alt="" loading="lazy"></figure>
+<h1 id="self-attention">Self-Attention</h1>
+<p>Self-Attention的背景是原来我们了解的Model的输入都是一个向量，那如果Model的输入变成了很多个向量，甚至是一个序列，我们应该如何进行处理呢。<br>
+<img src="https://GinWithoutA.github.io//post-images/1686640972641.png" alt="" loading="lazy"><br>
+一般来说我们可以用<strong>One-Hot Encoding</strong>来进行处理，可是处理后的向量并不能看得出来他们之间有什么关系。</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#error%E7%9A%84%E6%9D%A5%E6%BA%90bias%E5%92%8Cvarience">Error的来源：Bias和Varience</a></li>
+<li><a href="#gradient-descent">Gradient Descent</a></li>
+<li><a href="#gradient-descent-tipstochastic-gradient-descent">Gradient Descent Tip：Stochastic Gradient Descent</a></li>
+<li><a href="#feature-scaling">Feature Scaling</a></li>
+<li><a href="#self-attention">Self-Attention</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://GinWithoutA.github.io/post/lun-wen-xue-xi-2/">
+              <h3 class="post-title">
+                论文学习2
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://GinWithoutA.github.io//atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

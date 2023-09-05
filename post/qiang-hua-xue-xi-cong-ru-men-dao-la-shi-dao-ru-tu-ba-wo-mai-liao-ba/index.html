@@ -1,0 +1,176 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>强化学习（从入门到拉屎到入土）把我埋了吧 | GinWithoutA的随笔空间</title>
+<link rel="shortcut icon" href="https://GinWithoutA.github.io//favicon.ico?v=1693915246477">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://GinWithoutA.github.io//styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="强化学习（从入门到拉屎到入土）把我埋了吧 | GinWithoutA的随笔空间 - Atom Feed" href="https://GinWithoutA.github.io//atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="这篇文章写一写强化学习里面很多细枝末节的东西
+Temporal Credit Assignment Problem（CAP）时序信用分配问题
+一般指强化学习和序列决策问题中，如何合理地将奖励或回报分配给产生该回报的动作序列中的各个动作。
+在..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://GinWithoutA.github.io/">
+  <img class="avatar" src="https://GinWithoutA.github.io//images/avatar.png?v=1693915246477" alt="">
+  </a>
+  <h1 class="site-title">
+    GinWithoutA的随笔空间
+  </h1>
+  <p class="site-description">
+    什么都写写
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              强化学习（从入门到拉屎到入土）把我埋了吧
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-05-25
+              </span>
+              <span>
+                2 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <p>这篇文章写一写强化学习里面很多细枝末节的东西</p>
+<h1 id="temporal-credit-assignment-problemcap时序信用分配问题">Temporal Credit Assignment Problem（CAP）时序信用分配问题</h1>
+<p>一般指强化学习和序列决策问题中，如何合理地将奖励或回报分配给产生该回报的动作序列中的各个动作。</p>
+<p>在强化学习中，智能体在环境中采取一系列动作，并接收相应的奖励或回报。然而，由于动作序列是逐步产生的，往往只有最终的回报与智能体的决策相关联，而中间的动作可能具有不同程度的贡献。Temporal Credit Assignment Problem 的目标就是要准确地确定每个动作对最终回报的贡献。</p>
+<p>这个问题的挑战在于，由于环境的延迟反馈和奖励信号的稀疏性，智能体必须通过观察到的回报来推断哪些动作是导致回报的关键因素。这需要智能体能够建立起正确的动作与回报之间的因果关系，并将回报的影响逐步传递回动作序列中的每个动作。</p>
+<p>解决时序信用分配问题是强化学习的核心挑战之一，涉及到动作选择、价值函数估计、策略优化等方面。有效的信用分配方法可以帮助智能体更好地学习和优化其决策策略，从而实现更高效的学习和决策能力。</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#temporal-credit-assignment-problemcap%E6%97%B6%E5%BA%8F%E4%BF%A1%E7%94%A8%E5%88%86%E9%85%8D%E9%97%AE%E9%A2%98">Temporal Credit Assignment Problem（CAP）时序信用分配问题</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://GinWithoutA.github.io/post/qiang-hua-xue-xi-cong-ru-men-dao-la-shi-dao-ru-tu-zhong-yu-ke-yi-la-shi-liao/">
+              <h3 class="post-title">
+                强化学习-从入门到拉屎到入土：今天我们来拉屎了-1（进阶篇）
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://GinWithoutA.github.io//atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>
